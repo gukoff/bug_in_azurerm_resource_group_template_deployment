@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logic-app-name": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('logic-app-name')]",
+            "location": "westeurope",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://pluginsdk.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "triggers": {},
+                    "actions": {}
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}
+
