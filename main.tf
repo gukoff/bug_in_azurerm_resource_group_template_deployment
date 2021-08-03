@@ -29,8 +29,8 @@ resource "azurerm_storage_account" "storage" {
   }
 }
 
-# ARM deployment of a resource without 
-# managed identity and without output values
+# ARM deployment of a resource with 
+# managed identity and with output values
 resource "azurerm_resource_group_template_deployment" "arm_deployment" {
   name                = "deployment-${local.unique_suffix}"
   resource_group_name = azurerm_resource_group.rg.name
@@ -41,4 +41,12 @@ resource "azurerm_resource_group_template_deployment" "arm_deployment" {
     }
   })
   template_content = file("logicapp.json")
+}
+
+# Resource that references the output of the ARM deployment.
+# This is what makes "terraform plan" fail. 
+resource "azurerm_role_assignment" "file_st_role_assignment" {
+  scope                = azurerm_storage_account.storage.id
+  role_definition_name = "Reader"
+  principal_id         = jsondecode(azurerm_resource_group_template_deployment.arm_deployment.output_content).principalId.value
 }
